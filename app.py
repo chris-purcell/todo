@@ -34,10 +34,11 @@ def static_from_root():
 # Routes
 @app.route('/')
 def todo():
-    title = r1.hget('post:0', 'title')
-    post = r1.hget('post:0', 'post')
-    todo = [dict(title=title, post=post, title1=title, post1=post)]
-    return render_template('todo.html', todo=todo)
+    posts = r1.zrangebyscore('posts', '-inf', '+inf')
+    for post in posts:
+        title = r1.hget(post, 'title')
+        data  = r1.hget(post, 'post')
+    return render_template('todo.html', posts=[title,data])
 
 @app.route('/add', methods=['POST'])
 def add_entry():

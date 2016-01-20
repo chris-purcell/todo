@@ -12,8 +12,8 @@
     </form>
   {% endif %}
   <ul class=todo>
-  {% for entry in todo %}
-    <li><h2>{{ entry.title }}</h2>{{ entry.post|safe }}
+  {% for post in posts %}
+    <li><h2>{{ post.title }}</h2>{{ post.data |safe }}
   {% else %}
     <li><em>Unbelievable. No entries so far.</em>
   {% endfor %}
