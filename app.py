@@ -34,11 +34,11 @@ def static_from_root():
 # Routes
 @app.route('/')
 def todo():
+    data = {}
     posts = r1.zrangebyscore('posts', '-inf', '+inf')
-    for post in posts:
-        title = r1.hget(post, 'title')
-        data  = r1.hget(post, 'post')
-    return render_template('todo.html', posts=[title,data])
+    for p in posts:
+        data[p] = r1.hgetall(p)
+    return render_template('todo.html', data=data)
 
 @app.route('/add', methods=['POST'])
 def add_entry():
@@ -55,14 +55,14 @@ def login():
     if request.method == 'POST' and form.validate():
         user = User(form.username.data, form.password.data)
         flash('Thank you for logging in.')
-        return redirect(url_for('todo.html'))
+        return redirect(url_for('todo'))
     return render_template('login.html', error=error)
 
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
     flash('You were logged out.')
-    return redirect(url_for('show_wishlist'))
+    return redirect(url_for('todo'))
 
 if __name__ == '__main__':
     app.run(debug=True)

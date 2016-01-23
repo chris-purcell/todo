@@ -12,8 +12,8 @@
     </form>
   {% endif %}
   <ul class=todo>
-  {% for post in posts %}
-    <li><h2>{{ post.title }}</h2>{{ post.data |safe }}
+  {% for key, value in data.iteritems() %}
+    <li><h2>{{ value['name'] }}</h2>{{ value['post'] |safe }}
   {% else %}
     <li><em>Unbelievable. No entries so far.</em>
   {% endfor %}
