@@ -44,23 +44,24 @@ def todo():
 def add_entry():
     if not session.get('logged_in'):
         abort(401)
-    r1.hmset('post:%d',{'id':'%d', 'title':title, 'post':text}) % id
+    r1.hmset( p, {'name':name, 'post':text})
+
     flash('New entry was successfully posted')
     return redirect(url_for('todo'))
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
-    form = LoginForm(request.form)
-    if request.method == 'POST' and form.validate():
-        user = User(form.username.data, form.password.data)
+    form = LoginForm()
+    if form.validate_on_submit():
+        login_user(user)
         flash('Thank you for logging in.')
         return redirect(url_for('todo'))
-    return render_template('login.html', error=error)
+    return render_template('login.html', form=form, error=error)
 
 @app.route('/logout')
 def logout():
-    session.pop('logged_in', None)
+    logout_user()
     flash('You were logged out.')
     return redirect(url_for('todo'))
 
