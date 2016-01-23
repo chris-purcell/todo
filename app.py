@@ -44,7 +44,7 @@ def todo():
 def add_entry():
     if not session.get('logged_in'):
         abort(401)
-    r1.hmset( p, {'name':name, 'post':text})
+    r1.hmset( p, { 'name' : name , 'post' : post })
 
     flash('New entry was successfully posted')
     return redirect(url_for('todo'))
