@@ -19,5 +19,5 @@ bcrypt = Bcrypt(app)
 pw_hash = bcrypt.generate_password_hash(password)
 
 # Commit changes and close database
-r0.hmset('user0',{'id':'0','username': username, 'password': pw_hash, 'email' : email})
+r0.hmset('users',{'username': username, 'password': pw_hash, 'email' : email})
 

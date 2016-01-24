@@ -3,12 +3,10 @@
   <h2>Login</h2>
   {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
 
-  {% from "_formhelpers.html" import render_field %}
   <form method=post action="{{ url_for('login') }}">
     <dl>
-      {{ render_field(form.username) }}
-      {{ render_field(form.password) }}
-      {{ render_field(form.confirm) }}
+      {{ form.username() }}
+      {{ form.password() }}
     </dl>
     <p><input type=submit value=Login>
   </form>
