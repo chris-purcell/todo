@@ -5,21 +5,25 @@ from flask import (Flask, request, session, g, redirect, url_for,
 from flask.ext.bcrypt import Bcrypt
 from getpass import getpass
 from wtforms import Form, BooleanField, TextField, PasswordField, validators
-
+from session import *
 
 # create our little wishlist application
 app = Flask(__name__)
 flask_auth = Bcrypt(app)
 
-# Load config
-app.config.update(dict(
-    SECRET_KEY = 'Vnd1WVe5mNfe5fgz0wwZ0NL4mNfe5fgzVnd1WVe5',
-))
+# Debug yes or no?
+app.debug = True
+
+# Load config directives
+app.session_interface = RedisSessionInterface()
+app.config.secret_key = 'Vnd1WVe5mNfe5fgz0wwZ0NL4mNfe5fgzVnd1WVe5'
 
 
 # Database functions
 # r0 = auth database
 # r1 = posts database
+# r16 = sessions database
+
 r0 = redis.StrictRedis(host='localhost', port=6379, db=0)
 r1 = redis.StrictRedis(host='localhost', port=6379, db=1)
 
@@ -52,9 +56,9 @@ def add_entry():
     if not session.get('logged_in'):
         abort(401)
     n = r1.zcard('posts')
-    p = 'post:' + n
+    p = ('post:' + str(n))
     r1.zadd('posts', n, p)
-    r1.hmset( p, { 'name' : name , 'post' : post })
+    r1.hmset( p, { 'name' : request.form['name'] , 'post' : request.form['post'] })
     flash('New entry was successfully posted')
     return redirect(url_for('index'))
 
