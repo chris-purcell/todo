@@ -29,8 +29,8 @@ r1 = redis.StrictRedis(host='localhost', port=6379, db=1)
 
 # Classes
 class LoginForm(Form):
-    username = TextField('Username', [validators.Required()])
-    password = PasswordField('Password', [validators.Required()])
+    username = TextField('Username', [validators.Required(), validators.Length(min=4, max=32)])
+    password = PasswordField('Password', [validators.Required(), validators.Length(min=8, max=32)])
 
 class ServerError(Exception):
     pass
@@ -49,6 +49,9 @@ def index():
     posts = r1.zrangebyscore('posts', '-inf', '+inf')
     for p in posts:
         data[p] = r1.hgetall(p)
+    data_list = [x for x in data.items()]
+    data_list.sort(key=lambda x: x[0])
+    data = data_list
     return render_template('index.html', data=data)
 
 @app.route('/add', methods=['GET', 'POST'])
