@@ -5,8 +5,8 @@
 
   <form method=post action="{{ url_for('login') }}">
     <dl>
-      {{ form.username() }}
-      {{ form.password() }}
+      Username:  {{ form.username() }} <br ><br >
+      Password:  {{ form.password() }} <br >
     </dl>
     <p><input type=submit value=Login>
   </form>
